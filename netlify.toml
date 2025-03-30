@@ -1,0 +1,5 @@
+[build]
+  publish = "dist/Blog"
+  functions = "functions"
+[functions]
+  node_bundler = "esbuild"
