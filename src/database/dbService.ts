@@ -11,7 +11,15 @@ export async function getPosts(): Promise<Post[]> {
   const response = await fetch(url, {
     mode: "cors"
   });
-  const data: Post[] = await response.json();
+  let data: Post[];
+  try {
+    data = await response.json();
+  }
+  catch (error) {
+    data = [];
+    console.error("Error fetching posts:", error);
+  }
+  
   return data;
 }
 
@@ -56,8 +64,11 @@ export async function addLike(postId: number): Promise<Post> {
 // COMMENTS
 //
 
-export async function getComments(postId: number): Promise<Comment[]> {
-  let url = PUBLIC_FUNCTIONS_URL + "/comments?postId=" + postId;
+export async function getComments(postId: any): Promise<Comment[]> {
+  let url = PUBLIC_FUNCTIONS_URL + "/comments";
+  if (postId !== undefined) {
+    url += "?postId=" + postId;
+  }
   const response = await fetch(url, {
     mode: "cors"
   });

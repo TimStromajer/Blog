@@ -6,38 +6,37 @@
   import { postsData, commentsData } from "../database/database"; 
   import { getPosts, getComments } from "../database/dbService";
 
+  export let data;
   let blogPosts;
 
   onMount(() => {
-    // blogPosts = postsData;
-    // const commentCounts = commentsData.reduce((acc, comment) => {
+    blogPosts = data.posts;
+    let commentsData = data.comments.reduce((acc, comment) => {
+      acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+      return acc;
+    }, {});
+    blogPosts = blogPosts.map((post) => {
+      return {
+        ...post,
+        comments: commentsData[post._id] || 0,
+      };
+    });
+    // getPosts().then((data) => {
+    //   blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // });
+    // getComments().then((data) => {
+    //   const commentCounts = data.reduce((acc, comment) => {
     //     acc[comment.postId] = (acc[comment.postId] || 0) + 1;
     //     return acc;
     //   }, {});
-    // blogPosts = blogPosts.map((post) => {
-    //   return {
-    //     ...post,
-    //     comments: commentCounts[post._id] || 0,
-    //   };
+    // }).then(() => {
+    //   blogPosts = blogPosts.map((post) => {
+    //     return {
+    //       ...post,
+    //       comments: commentCounts[post._id] || 0,
+    //     };
+    //   });
     // });
-    
-    getPosts().then((data) => {
-      blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    });
-    getComments().then((data) => {
-      const commentCounts = data.reduce((acc, comment) => {
-        acc[comment.postId] = (acc[comment.postId] || 0) + 1;
-        return acc;
-      }, {});
-      
-    }).then(() => {
-      blogPosts = blogPosts.map((post) => {
-        return {
-          ...post,
-          comments: commentCounts[post._id] || 0,
-        };
-      });
-    });
   })
 
   /**
@@ -63,8 +62,6 @@
   .card {
       display: flex;
       flex-direction: column;
-      border: 1px solid #CEB5A7;
-      border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       background-color: #CEB5A7;

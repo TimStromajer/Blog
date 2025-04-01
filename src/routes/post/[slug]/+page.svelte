@@ -13,8 +13,6 @@
   let likeDisabled = false; // Track if the like button is disabled
 
   onMount(() => {
-    //post = postsData[0]
-
     getPost(data.slug).then((postData) => {
       post = postData;
     }).then(() => {

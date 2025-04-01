@@ -1,8 +1,5 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { Context } from "@netlify/functions";
-import { Console } from 'console';
-
-console.log("Starting posts function");
 
 require('dotenv').config();
 
@@ -13,20 +10,20 @@ if (!uri) {
 const mongoClient = new MongoClient(uri);
 
 export const handler = async (event: any, context: Context) => {
-  console.log("starting posts function");
   if (event.httpMethod == "GET") {
-    console.log("GET post");
     const clientPromise = await mongoClient.connect();
-    console.log("mongo connected");
     try {
       const database = (await clientPromise).db("Blog");
       const collection = database.collection("Posts");
-      console.log("db connected");
 
       if (event.queryStringParameters.postId != null) {
         let postId = event.queryStringParameters.postId;
-        const cursor = collection.findOne({ _id: new ObjectId(postId) });
-        console.log("mongo found");
+        let cursor;
+        if (postId == null) {
+          cursor = collection.find();
+        } else {
+          cursor = collection.findOne({ _id: new ObjectId(postId) });
+        }
         const data = await cursor;
         return {
           statusCode: 200,
