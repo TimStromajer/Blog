@@ -3,23 +3,24 @@
   import { onMount } from "svelte";
   import { page } from '$app/stores';
 
-  import { postsData } from "../../../database/database";
-  import { commentsData } from "../../../database/database";
+  import { postsData, commentsData } from "../../../database/database";
   import { Comment } from "$lib/comment";
-  import { getPost, getComments, addComment } from "../../../database/dbService";
+  import { getPost, getComments, addComment, addLike } from "../../../database/dbService";
 
   export let data;
   let post;
   let comments;
+  let likeDisabled = false; // Track if the like button is disabled
 
   onMount(() => {
-    getPost(data.slug).then((postData) => {
-      post = postData;
-    }).then(() => {
-      getComments(post._id).then((commentsData) => {
-        comments = commentsData;
-      });
-    });
+    post = postsData[0]
+    // getPost(data.slug).then((postData) => {
+    //   post = postData;
+    // }).then(() => {
+    //   getComments(post._id).then((commentsData) => {
+    //     comments = commentsData;
+    //   });
+    // });
   })
 
   // New comment form data
@@ -48,6 +49,20 @@
       });
     }
   }
+
+  async function likePost() {
+    if (!likeDisabled) {
+      likeDisabled = true; // Disable the button
+      try {
+        await addLike(post._id); // Call the addLike function
+        post.likes += 1; // Update the like count locally
+        console.log("Post liked!");
+      } catch (error) {
+        console.error("Error liking the post:", error);
+        likeDisabled = false; // Re-enable the button if there's an error
+      }
+    }
+  }
 </script>
 
 <style>
@@ -56,14 +71,14 @@
     flex-direction: column;
     align-items: center;
     padding: 1rem;
-    background-color: #f9f9f9;
+    background-color: #ffffff00;
   }
 
   .post-card {
     width: 100%;
       max-width: 1000px;
-      background-color: #fff;
-      border: 1px solid #ddd;
+      background-color: #CEB5A7;
+      border: 0px solid #CEB5A7;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       overflow: hidden;
@@ -74,8 +89,15 @@
       font-weight: bold;
       padding: 1rem;
       text-align: center;
-      background-color: #333;
+      background-color: #9F4A5480;
       color: white;
+  }
+
+  .post-user {
+    font-size: 1rem;
+    color: #666;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
   .post-image {
@@ -92,6 +114,28 @@
       line-height: 1.6;
   }
 
+  .post-footer {
+    display: flex;
+    justify-content: flex-end; /* Align the button to the right */
+    padding: 0.5rem;
+    background-color: #CEB5A7;
+    border-top: 1px solid #92828D;
+  }
+
+  .like-button {
+    padding: 0.3rem 0.5rem;
+    background-color: #1B4965;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .like-button:hover {
+    background-color: #1B496590;
+  }
+
   .comments-section {
     max-width: 1000px;
     width: 100%;
@@ -102,8 +146,8 @@
   }
 
   .comment-card {
-      background-color: #fff;
-      border: 1px solid #ddd;
+      background-color: #CEB5A7;
+      border: 1px solid #CEB5A7;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       padding: 1rem;
@@ -132,8 +176,8 @@
   .add-comment-section {
     max-width: 1000px;
     width: 100%;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #CEB5A7;
+    border: 1px solid #CEB5A7;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -156,7 +200,8 @@
     padding: 1rem;
     margin: 1rem;
     width: auto;
-    border: 1px solid #ddd;
+    background-color: #CEB5A7;
+    border: 1px solid #92828D;
     border-radius: 4px;
     font-size: 1rem;
   }
@@ -164,16 +209,17 @@
   .add-comment-section button {
     align-self: flex-end;
     padding: 0.5rem 1rem;
-    background-color: #333;
+    background-color: #1B4965;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+    margin: 1rem;
   }
 
   .add-comment-section button:hover {
-    background-color: #555;
+    background-color: #1B496590;
   }
 </style>
 
@@ -181,9 +227,13 @@
   {#if post}
     <div class="post-card">
       <h1 class="post-title">{post.title}</h1>
+      <p class="post-user">By {post.user}</p>
       <img class="post-image" src={`data:image/jpeg;base64,${post.image}`} alt={post.title} />
       <div class="post-content">
         <p>{post.text}</p>
+      </div>
+      <div class="post-footer">
+        <button class="like-button" on:click={likePost} disabled={likeDisabled}>👍 {post.likes}</button>
       </div>
     </div>
 

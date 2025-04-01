@@ -4,8 +4,8 @@
 
 <style>
   header {
-      background-color: #333;
-      color: white;
+      background-color: #1B4965;
+      color: #82DDF0;
       padding: 0.2rem 1rem 0.2rem 1rem;
       display: flex;
       justify-content: space-between;
@@ -18,14 +18,14 @@
   }
 
   nav a {
-      color: white;
+      color: #82DDF0;
       text-decoration: none;
       font-weight: bold;
       transition: color 0.3s;
   }
 
   nav a:hover {
-      color: #ff9800;
+      color: #69B578;
   }
 
   footer {
@@ -33,7 +33,7 @@
       bottom: 0;
       width: 100%;
       text-align: center;
-      background-color: #f4f4f4;
+      background-color: #CEB5A770;
       color: #333;
       margin-top: 2rem;
       font-size: 0.9rem;
@@ -41,7 +41,7 @@
 </style>
 
 <header>
-  <h1>My Blog</h1>
+  <h1>Blog</h1>
   <nav>
       <a href="/">Home</a>
       <a href="/post">Post</a>
@@ -54,5 +54,5 @@
 </main>
 
 <footer>
-  <p>&copy; 2025 My Blog. All rights reserved.</p>
+  <p>&copy; 2025 Blog. All rights reserved.</p>
 </footer>

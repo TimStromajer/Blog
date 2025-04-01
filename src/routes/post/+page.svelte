@@ -33,10 +33,11 @@
       const post = new Post(
         "",
         newPost.title,
-        newPost.image,
         newPost.text,
         0,
-        new Date()
+        new Date(),
+        "admin",
+        newPost.image,
       );
 
       addPost(post).then(() => {
@@ -65,8 +66,8 @@
     max-width: 600px;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #CEB5A7;
+    border: 1px solid #CEB5A7;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -88,15 +89,21 @@
   .add-post-container textarea {
     width: auto;
     padding: 0.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid #92828D;
     border-radius: 4px;
     font-size: 1rem;
+    background-color: #CEB5A7;
+  }
+
+  .add-post-container input[type="file"]::file-selector-button {
+    background-color: #CEB5A7;
+    border: 1px solid #92828D;
   }
 
   .add-post-container button {
     align-self: flex-end;
     padding: 0.5rem 1rem;
-    background-color: #333;
+    background-color: #1B4965;
     color: white;
     border: none;
     border-radius: 4px;
@@ -105,7 +112,7 @@
   }
 
   .add-post-container button:hover {
-    background-color: #555;
+    background-color: #1B496590;
   }
 </style>
 

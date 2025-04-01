@@ -3,15 +3,41 @@
 
   import { onMount } from "svelte";
 
-  //import { postsData } from "../database/database"; 
-  import { getPosts } from "../database/dbService";
+  import { postsData, commentsData } from "../database/database"; 
+  import { getPosts, getComments } from "../database/dbService";
 
   let blogPosts;
 
   onMount(() => {
-    getPosts().then((data) => {
-      blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    blogPosts = postsData;
+    const commentCounts = commentsData.reduce((acc, comment) => {
+        acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+        return acc;
+      }, {});
+    blogPosts = blogPosts.map((post) => {
+      return {
+        ...post,
+        comments: commentCounts[post._id] || 0,
+      };
     });
+    
+    // getPosts().then((data) => {
+    //   blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // });
+    // getComments().then((data) => {
+    //   const commentCounts = data.reduce((acc, comment) => {
+    //     acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+    //     return acc;
+    //   }, {});
+      
+    // }).then(() => {
+    //   blogPosts = blogPosts.map((post) => {
+    //     return {
+    //       ...post,
+    //       comments: commentCounts[post._id] || 0,
+    //     };
+    //   });
+    // });
   })
 
   /**
@@ -37,11 +63,11 @@
   .card {
       display: flex;
       flex-direction: column;
-      border: 1px solid #ddd;
+      border: 1px solid #CEB5A7;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
+      background-color: #CEB5A7;
       height: 100%;
       max-height: 800px;
   }
@@ -88,8 +114,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 0.5rem 1rem;
-      background-color: #f9f9f9;
-      border-top: 1px solid #ddd;
+      background-color: #CEB5A7;
+      border-top: 1px solid #92828D;
       font-size: 0.9rem;
       color: #666;
   }
@@ -106,12 +132,14 @@
               <a href={`/post/${post._id}`}>
                 <h2 class="card-title">{post.title}</h2>
               </a>
-              <p class="card-date">{new Date(post.date).toLocaleString()}</p>
+              <p class="card-date">
+                {post.user} - {new Date(post.date).toLocaleString()}
+              </p>
             </div>
             <p class="card-description">{truncateText(post.text, 300)}</p>
           </div>
           <div class="card-footer">
-              <span>X Comments</span>
+              <span>{post.comments} Comments</span>
               <span>{post.likes} Likes</span>
           </div>
       </div>

@@ -74,6 +74,31 @@ export async function handler(event, context) {
     } finally {
       (await clientPromise).close();
     }
+  } else if (event.httpMethod == "PUT") {
+    const clientPromise = await mongoClient.connect();
+    try {
+      const database = (await clientPromise).db("Blog");
+      const collection = database.collection("Posts");
+
+      let postId = event.queryStringParameters.postId;
+      let post = await collection.updateOne({ _id: new ObjectId(postId) }, { $inc: { likes: 1 } });
+      return {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*"
+        },
+        body: JSON.stringify(post)
+      }
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify(error)
+      }
+    } finally {
+      (await clientPromise).close();
+    }
   } else {
     console.log("Else request");
     return {

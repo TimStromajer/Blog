@@ -11,5 +11,6 @@
 <style>
     .main-content {
         margin: 1rem;
+				color: #69B578;
     }
 </style>

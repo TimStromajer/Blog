@@ -38,6 +38,20 @@ export async function addPost(post: Post): Promise<Post> {
   return data;
 }
 
+export async function addLike(postId: number): Promise<Post> {
+  let url = PUBLIC_FUNCTIONS_URL + "/posts?postId=" + postId;
+  const response = await fetch(url, {
+    method: "PUT",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ like: true })
+  });
+  const data: Post = await response.json();
+  return data;
+}
+
 //
 // COMMENTS
 //
