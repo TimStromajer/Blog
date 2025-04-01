@@ -1,4 +1,6 @@
 import { MongoClient } from 'mongodb';
+import { Context } from "@netlify/functions";
+
 require('dotenv').config();
 
 const uri = process.env.MONGODB_URL;
@@ -7,7 +9,7 @@ if (!uri) {
 }
 const mongoClient = new MongoClient(uri);
 
-export async function handler(event, context) {
+export const handler = async (event: any, context: Context) => {
   if (event.httpMethod == "GET") {
     const clientPromise = await mongoClient.connect();
     try {

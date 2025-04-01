@@ -22,6 +22,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@netlify/functions": "^3.0.4",
 		"dotenv": "^16.4.7",
 		"mongodb": "^6.15.0",
 		"netlify-cli": "^19.1.4"
