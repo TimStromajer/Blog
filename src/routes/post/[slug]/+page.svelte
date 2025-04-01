@@ -13,14 +13,15 @@
   let likeDisabled = false; // Track if the like button is disabled
 
   onMount(() => {
-    post = postsData[0]
-    // getPost(data.slug).then((postData) => {
-    //   post = postData;
-    // }).then(() => {
-    //   getComments(post._id).then((commentsData) => {
-    //     comments = commentsData;
-    //   });
-    // });
+    //post = postsData[0]
+
+    getPost(data.slug).then((postData) => {
+      post = postData;
+    }).then(() => {
+      getComments(post._id).then((commentsData) => {
+        comments = commentsData;
+      });
+    });
   })
 
   // New comment form data

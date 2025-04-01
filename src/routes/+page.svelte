@@ -9,35 +9,35 @@
   let blogPosts;
 
   onMount(() => {
-    blogPosts = postsData;
-    const commentCounts = commentsData.reduce((acc, comment) => {
-        acc[comment.postId] = (acc[comment.postId] || 0) + 1;
-        return acc;
-      }, {});
-    blogPosts = blogPosts.map((post) => {
-      return {
-        ...post,
-        comments: commentCounts[post._id] || 0,
-      };
-    });
-    
-    // getPosts().then((data) => {
-    //   blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    // });
-    // getComments().then((data) => {
-    //   const commentCounts = data.reduce((acc, comment) => {
+    // blogPosts = postsData;
+    // const commentCounts = commentsData.reduce((acc, comment) => {
     //     acc[comment.postId] = (acc[comment.postId] || 0) + 1;
     //     return acc;
     //   }, {});
-      
-    // }).then(() => {
-    //   blogPosts = blogPosts.map((post) => {
-    //     return {
-    //       ...post,
-    //       comments: commentCounts[post._id] || 0,
-    //     };
-    //   });
+    // blogPosts = blogPosts.map((post) => {
+    //   return {
+    //     ...post,
+    //     comments: commentCounts[post._id] || 0,
+    //   };
     // });
+    
+    getPosts().then((data) => {
+      blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+    });
+    getComments().then((data) => {
+      const commentCounts = data.reduce((acc, comment) => {
+        acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+        return acc;
+      }, {});
+      
+    }).then(() => {
+      blogPosts = blogPosts.map((post) => {
+        return {
+          ...post,
+          comments: commentCounts[post._id] || 0,
+        };
+      });
+    });
   })
 
   /**
