@@ -1,15 +1,18 @@
 import { MongoClient } from 'mongodb';
-require ('dotenv').config();
+require('dotenv').config();
 
-const uri = process.env.MONGO_URI;
+const uri = process.env.MONGODB_URL;
+if (!uri) {
+  throw new Error("MONGODB_URL is not defined in the environment variables.");
+}
 const mongoClient = new MongoClient(uri);
 
 export async function handler(event, context) {
   if (event.httpMethod == "GET") {
     const clientPromise = await mongoClient.connect();
     try {
-      const database = (await clientPromise).db("blog");
-      const collection = database.collection("comments");
+      const database = (await clientPromise).db("Blog");
+      const collection = database.collection("Comments");
       // get postid parameter
       let postId = event.queryStringParameters.postId;
       const cursor = collection.find({postId: parseInt(postId)});
@@ -35,8 +38,8 @@ export async function handler(event, context) {
     const clientPromise = await mongoClient.connect();
     let reqData = JSON.parse(event.body);
     try {
-      const database = (await clientPromise).db("blog");
-      const collection = database.collection("comments");
+      const database = (await clientPromise).db("Blog");
+      const collection = database.collection("Comments");
 
       let comment = await collection.insertOne(reqData);
       return {
