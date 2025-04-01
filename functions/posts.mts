@@ -1,5 +1,8 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { Context } from "@netlify/functions";
+import { Console } from 'console';
+
+console.log("Starting posts function");
 
 require('dotenv').config();
 
