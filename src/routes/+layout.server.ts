@@ -3,10 +3,18 @@ import { postsData, commentsData } from "../database/database";
 
 export async function load() {
   console.log("Loading posts...");
-  const posts = await getPosts();
-  const comments = await getComments(undefined);
-  return {
-    posts: posts,
-    comments: comments
-  };
+  try {
+    const posts = await getPosts();
+    const comments = await getComments(undefined);
+    return {
+      posts: posts,
+      comments: comments
+    };
+  } catch (error) {
+    console.error("Error loading posts:", error);
+    return {
+      posts: [],
+      comments: []
+    };
+  }
 }
