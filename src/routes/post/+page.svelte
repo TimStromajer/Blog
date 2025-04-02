@@ -18,18 +18,49 @@
    * @param {{ target: { files: any[]; }; }} event
    */
    function handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        newPost.image = reader.result.split(",")[1]; // Extract Base64 string
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        // Set the desired width and height for scaling
+        const MAX_WIDTH = 100; // Adjust as needed
+        const MAX_HEIGHT = 100; // Adjust as needed
+
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate the new dimensions while maintaining the aspect ratio
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+          if (width > height) {
+            height = (height * MAX_WIDTH) / width;
+            width = MAX_WIDTH;
+          } else {
+            width = (width * MAX_HEIGHT) / height;
+            height = MAX_HEIGHT;
+          }
+        }
+
+        // Create a canvas and draw the scaled image
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Convert the canvas content to a Base64 string
+        newPost.image = canvas.toDataURL("image/jpeg").split(",")[1]; // Extract Base64 string
       };
-      reader.readAsDataURL(file); // Read the file as a Data URL
-    }
+      img.src = reader.result; // Set the image source to the file's data URL
+    };
+    reader.readAsDataURL(file); // Read the file as a Data URL
   }
+}
 
   function createPost() {
     if (newPost.password === "admin") {
+      console.log("length: " + newPost.image.length);
       const post = new Post(
         "",
         newPost.title,

@@ -9,18 +9,33 @@
   export let data;
   let blogPosts;
 
-  onMount(() => {
-    blogPosts = data.posts;
-    let commentsData = data.comments.reduce((acc, comment) => {
-      acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+  blogPosts = data.posts.map((post) => {
+    const commentCount = data.comments.reduce((acc, comment) => {
+      if (comment.postId === post._id) {
+        acc += 1;
+      }
       return acc;
-    }, {});
-    blogPosts = blogPosts.map((post) => {
-      return {
-        ...post,
-        comments: commentsData[post._id] || 0,
-      };
-    });
+    }, 0);
+
+    return {
+      ...post,
+      comments: commentCount
+    };
+  });
+
+  onMount(() => {
+    // blogPosts = data.posts;
+    // let commentsData = data.comments.reduce((acc, comment) => {
+    //   acc[comment.postId] = (acc[comment.postId] || 0) + 1;
+    //   return acc;
+    // }, {});
+    // blogPosts = blogPosts.map((post) => {
+    //   return {
+    //     ...post,
+    //     comments: commentsData[post._id] || 0,
+    //   };
+    // });
+
     // getPosts().then((data) => {
     //   blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
     // });
