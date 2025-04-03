@@ -25,8 +25,8 @@
       const img = new Image();
       img.onload = () => {
         // Set the desired width and height for scaling
-        const MAX_WIDTH = 100; // Adjust as needed
-        const MAX_HEIGHT = 100; // Adjust as needed
+        const MAX_WIDTH = 500; // Adjust as needed
+        const MAX_HEIGHT = 500; // Adjust as needed
 
         let width = img.width;
         let height = img.height;
@@ -94,13 +94,21 @@
 
 <style>
   .add-post-container {
-    max-width: 600px;
-    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1rem;
+    background-color: #ffffff00;
+  }
+
+  .post-card {
+    width: 100%;
+    max-width: 800px;
     background-color: #CEB5A7;
-    border: 1px solid #CEB5A7;
+    border: 0px solid #CEB5A7;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
 
   .add-post-container h1 {
@@ -124,6 +132,7 @@
     border-radius: 4px;
     font-size: 1rem;
     background-color: #CEB5A7;
+    margin: 0 1rem 0 1rem ;
   }
 
   .add-post-container input[type="file"]::file-selector-button {
@@ -140,6 +149,7 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+    margin: 0 1rem 1rem 1rem; 
   }
 
   .add-post-container button:hover {
@@ -148,33 +158,35 @@
 </style>
 
 <div class="add-post-container">
-  <h1>Add a New Post</h1>
-  <form on:submit|preventDefault={createPost}>
-    <input
-      type="text"
-      placeholder="Title"
-      bind:value={newPost.title}
-      required
-    />
-    <input
-      id="image-upload"
-      type="file"
-      accept="image/png, image/jpeg"
-      on:change={handleFileUpload}
-      required
-    />
-    <textarea
-      placeholder="Description"
-      bind:value={newPost.text}
-      rows="6"
-      required
-    ></textarea>
-    <input
-      type="password"
-      placeholder="Password"
-      bind:value={newPost.password}
-      required
-    />
-    <button type="submit">Add Post</button>
-  </form>
+  <div class="post-card">
+    <h1>Add a New Post</h1>
+    <form on:submit|preventDefault={createPost}>
+      <input
+        type="text"
+        placeholder="Title"
+        bind:value={newPost.title}
+        required
+      />
+      <input
+        id="image-upload"
+        type="file"
+        accept="image/png, image/jpeg"
+        on:change={handleFileUpload}
+        required
+      />
+      <textarea
+        placeholder="Description"
+        bind:value={newPost.text}
+        rows="6"
+        required
+      ></textarea>
+      <input
+        type="password"
+        placeholder="Password"
+        bind:value={newPost.password}
+        required
+      />
+      <button type="submit">Add Post</button>
+    </form>
+  </div>
 </div>

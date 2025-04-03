@@ -11,7 +11,7 @@
 
   blogPosts = data.posts.map((post) => {
     const commentCount = data.comments.reduce((acc, comment) => {
-      if (comment.postId === post._id) {
+      if (comment.postId === post.id) {
         acc += 1;
       }
       return acc;
@@ -22,37 +22,6 @@
       comments: commentCount
     };
   });
-
-  onMount(() => {
-    // blogPosts = data.posts;
-    // let commentsData = data.comments.reduce((acc, comment) => {
-    //   acc[comment.postId] = (acc[comment.postId] || 0) + 1;
-    //   return acc;
-    // }, {});
-    // blogPosts = blogPosts.map((post) => {
-    //   return {
-    //     ...post,
-    //     comments: commentsData[post._id] || 0,
-    //   };
-    // });
-
-    // getPosts().then((data) => {
-    //   blogPosts = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-    // });
-    // getComments().then((data) => {
-    //   const commentCounts = data.reduce((acc, comment) => {
-    //     acc[comment.postId] = (acc[comment.postId] || 0) + 1;
-    //     return acc;
-    //   }, {});
-    // }).then(() => {
-    //   blogPosts = blogPosts.map((post) => {
-    //     return {
-    //       ...post,
-    //       comments: commentCounts[post._id] || 0,
-    //     };
-    //   });
-    // });
-  })
 
   /**
    * Truncate text to a maximum length and add '...' if it exceeds the limit.
@@ -82,6 +51,7 @@
       background-color: #CEB5A7;
       height: 100%;
       max-height: 800px;
+      border-radius: 8px;
   }
 
   .card a {
@@ -136,12 +106,12 @@
 <div class="blog-container">
   {#each blogPosts as post}
       <div class="card">
-          <a href={`/post/${post._id}`}>
+          <a href={`/post/${post.id}`}>
               <img src={`data:image/jpeg;base64,${post.image}`} alt={post.title} />
           </a>
           <div class="card-content">
             <div>
-              <a href={`/post/${post._id}`}>
+              <a href={`/post/${post.id}`}>
                 <h2 class="card-title">{post.title}</h2>
               </a>
               <p class="card-date">

@@ -7,24 +7,27 @@ import { Comment } from "$lib/comment";
 //
 
 export async function getPosts(): Promise<Post[]> {
-  let url = PUBLIC_FUNCTIONS_URL + "/posts";
+  let url = PUBLIC_FUNCTIONS_URL + "/posts2";
   const response = await fetch(url, {
     mode: "cors"
   });
   let data: Post[];
   try {
     data = await response.json();
+    // data = data.map(post => ({
+    //   ...post,
+    //   date: new Date(post.date.seconds * 1000) 
+    // }));
   }
   catch (error) {
     data = [];
     console.error("Error fetching posts:", error);
   }
-  
   return data;
 }
 
 export async function getPost(postId: string): Promise<Post> {
-  let url = PUBLIC_FUNCTIONS_URL + "/posts?postId=" + postId;
+  let url = PUBLIC_FUNCTIONS_URL + "/posts2?postId=" + postId;
   const response = await fetch(url, {
     mode: "cors"
   });
@@ -33,7 +36,7 @@ export async function getPost(postId: string): Promise<Post> {
 }
 
 export async function addPost(post: Post): Promise<Post> {
-  let url = PUBLIC_FUNCTIONS_URL + "/posts";
+  let url = PUBLIC_FUNCTIONS_URL + "/posts2";
   const response = await fetch(url, {
     method: "POST",
     mode: "cors",
@@ -47,7 +50,7 @@ export async function addPost(post: Post): Promise<Post> {
 }
 
 export async function addLike(postId: number): Promise<Post> {
-  let url = PUBLIC_FUNCTIONS_URL + "/posts?postId=" + postId;
+  let url = PUBLIC_FUNCTIONS_URL + "/posts2?postId=" + postId;
   const response = await fetch(url, {
     method: "PUT",
     mode: "cors",
@@ -65,19 +68,23 @@ export async function addLike(postId: number): Promise<Post> {
 //
 
 export async function getComments(postId: any): Promise<Comment[]> {
-  let url = PUBLIC_FUNCTIONS_URL + "/comments";
+  let url = PUBLIC_FUNCTIONS_URL + "/comments2";
   if (postId !== undefined) {
     url += "?postId=" + postId;
   }
   const response = await fetch(url, {
     mode: "cors"
   });
-  const data: Comment[] = await response.json();
+  let data: Comment[] = await response.json();
+  // data = data.map(comment => ({
+  //   ...comment,
+  //   date: new Date(comment.date.seconds * 1000) 
+  // }));
   return data;
 }
 
 export async function addComment(comment: Comment): Promise<Comment> {
-  let url = PUBLIC_FUNCTIONS_URL + "/comments";
+  let url = PUBLIC_FUNCTIONS_URL + "/comments2";
   const response = await fetch(url, {
     method: "POST",
     mode: "cors",

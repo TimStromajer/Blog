@@ -2,6 +2,7 @@
   // @ts-nocheck
   import { onMount } from "svelte";
   import { page } from '$app/stores';
+  import { invalidate } from "$app/navigation";
 
   import { postsData, commentsData } from "../../../database/database";
   import { Comment } from "$lib/comment";
@@ -12,15 +13,10 @@
   let comments;
   let likeDisabled = false; // Track if the like button is disabled
 
-  onMount(() => {
-    getPost(data.slug).then((postData) => {
-      post = postData;
-    }).then(() => {
-      getComments(post._id).then((commentsData) => {
-        comments = commentsData;
-      });
-    });
-  })
+  // get post from data
+  post = data.post;
+  // get comments from data
+  comments = data.comments;
 
   // New comment form data
   let newComment = {
@@ -29,23 +25,23 @@
   };
 
   // Add a new comment
-  function createComment() {
+  async function createComment() {
     if (newComment.user.trim() && newComment.text.trim()) {
       const comment = new Comment(
         comments.length + 1, // Generate a new ID
         newComment.text,
         newComment.user,
         new Date(), // Current timestamp
-        post._id // Associate with the current post
+        post.id // Associate with the current post
       );
 
-      addComment(comment).then(() => {
-        console.log("Comment added successfully.");
-        comments = [...comments, comment];
-        // Reset the form
-        newComment.user = "";
-        newComment.text = "";
-      });
+      await addComment(comment)
+      console.log("Comment added successfully.");
+
+      comments = [...comments, comment];
+      // Reset the form
+      newComment.user = "";
+      newComment.text = "";
     }
   }
 
@@ -53,7 +49,7 @@
     if (!likeDisabled) {
       likeDisabled = true; // Disable the button
       try {
-        await addLike(post._id); // Call the addLike function
+        await addLike(post.id); // Call the addLike function
         post.likes += 1; // Update the like count locally
         console.log("Post liked!");
       } catch (error) {
@@ -75,12 +71,12 @@
 
   .post-card {
     width: 100%;
-      max-width: 1000px;
-      background-color: #CEB5A7;
-      border: 0px solid #CEB5A7;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+    max-width: 1000px;
+    background-color: #CEB5A7;
+    border: 0px solid #CEB5A7;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
 
   .post-title {

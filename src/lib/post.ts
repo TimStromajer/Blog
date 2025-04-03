@@ -1,14 +1,14 @@
 export class Post {
-  _id: string;
+  id: string;
   title: string;
   text: string;
   likes: number;
-  date: Date;
   user: string;
+  date: Date;
   image: string;
 
   constructor(
-      _id: string,
+      id: string,
       title: string,
       text: string,
       likes: number,
@@ -16,12 +16,12 @@ export class Post {
       user: string,
       image: string,
   ) {
-      this._id = _id;
+      this.id = id;
       this.title = title;
       this.text = text;
       this.likes = likes;
-      this.date = date;
       this.user = user;
       this.image = image;
+      this.date = date
   }
 }
