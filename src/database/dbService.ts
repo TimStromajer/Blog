@@ -14,10 +14,6 @@ export async function getPosts(): Promise<Post[]> {
   let data: Post[];
   try {
     data = await response.json();
-    // data = data.map(post => ({
-    //   ...post,
-    //   date: new Date(post.date.seconds * 1000) 
-    // }));
   }
   catch (error) {
     data = [];
@@ -76,10 +72,6 @@ export async function getComments(postId: any): Promise<Comment[]> {
     mode: "cors"
   });
   let data: Comment[] = await response.json();
-  // data = data.map(comment => ({
-  //   ...comment,
-  //   date: new Date(comment.date.seconds * 1000) 
-  // }));
   return data;
 }
 
