@@ -1,0 +1,17 @@
+{
+  "name": "Blog",
+  "description": "Blog app",
+  "short_name": "blog",
+  "display": "standalone",
+  "start_url": "/",
+  "background_color": "#1B4965",
+  "theme_color": "#82DDF0",
+  "icons": [
+      {
+          "src": "favicon.png",
+          "sizes": "128x128",
+          "type": "image/png",
+          "purpose": "any maskable"
+      }
+  ]
+}
